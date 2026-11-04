@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 120" width="240" height="120" role="img" aria-label="Rodar">
+  <rect x="4" y="4" width="232" height="112" rx="12" fill="#FFFFFF" stroke="#17191D" stroke-width="6"/>
+  <path d="M7 16a9 9 0 0 1 9-9h208a9 9 0 0 1 9 9v18H7z" fill="#1F4FA8"/>
+  <text x="120" y="27" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="13" letter-spacing="4" fill="#FFFFFF">ALUGUEL · BRASIL</text>
+  <text x="120" y="96" text-anchor="middle" font-family="'Barlow Condensed', 'Arial Narrow', Arial, sans-serif" font-weight="700" font-size="56" letter-spacing="10" fill="#17191D">RODAR</text>
+</svg>

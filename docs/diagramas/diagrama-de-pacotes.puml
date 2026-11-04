@@ -1,0 +1,73 @@
+@startuml diagrama-de-pacotes
+title Rodar — Diagrama de Pacotes (Visão Lógica · MVC)
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam packageBorderColor #17191D
+skinparam packageBackgroundColor #FFFFFF
+skinparam ArrowColor #17191D
+skinparam databaseBorderColor #17191D
+set separator none
+
+package "Subsistema: construção dinâmica das páginas web\n(frontend · React + Vite · /frontend/src)" {
+  package pages <<View>> {
+  }
+  package components <<View>> {
+  }
+  package context {
+  }
+  package services {
+  }
+  package utils {
+  }
+  package styles {
+  }
+}
+
+package "Subsistema: gestão de pedidos e contratos\n(backend · Spring Boot · br.pucminas.aluguelcarros)" {
+  package controller <<Controller>> {
+  }
+  package dto {
+  }
+  package service {
+  }
+  package model <<Model>> {
+  }
+  package repository {
+  }
+  package security {
+  }
+  package exception {
+  }
+  package config {
+  }
+}
+
+database "Supabase\n(PostgreSQL)" as DB
+
+pages ..> components
+pages ..> context
+pages ..> services
+pages ..> utils
+pages ..> styles
+components ..> utils
+context ..> services
+
+services ..> controller : HTTP/JSON (REST)\n+ token JWT
+
+controller ..> service
+controller ..> dto
+controller ..> security
+service ..> repository
+service ..> model
+service ..> dto
+service ..> exception
+service ..> security
+dto ..> model
+model ..> exception
+exception ..> dto
+repository ..> model
+security ..> model
+config ..> repository
+config ..> model
+repository ..> DB : JPA / Hibernate
+@enduml

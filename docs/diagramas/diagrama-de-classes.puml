@@ -1,0 +1,149 @@
+@startuml diagrama-de-classes
+title Rodar — Diagrama de Classes (pacote model)
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam classAttributeIconSize 0
+skinparam classBorderColor #17191D
+skinparam classBackgroundColor #FFFFFF
+skinparam classHeaderBackgroundColor #F2F1EC
+skinparam ArrowColor #17191D
+hide empty members
+
+abstract class Usuario {
+  - id : Long
+  - login : String
+  - senha : String
+  - nome : String
+  + {abstract} getPerfil() : Perfil
+  + mesmoUsuario(outro : Usuario) : boolean
+  + alterarSenha(senhaCriptografada : String) : void
+}
+
+class Cliente {
+  + {static} MAX_RENDIMENTOS : int = 3
+  - rg : String
+  - cpf : String
+  - profissao : String
+  + atualizarDados(login, nome, rg, cpf, endereco, profissao) : void
+  + adicionarRendimento(entidadeEmpregadora : String, valor : BigDecimal) : void
+  + limparRendimentos() : void
+  + getRendaTotal() : BigDecimal
+}
+
+class Endereco <<Embeddable>> {
+  - logradouro : String
+  - bairro : String
+  - cidade : String
+  - uf : String
+  - cep : String
+}
+
+class Rendimento {
+  - id : Long
+  - entidadeEmpregadora : String
+  - valor : BigDecimal
+}
+
+abstract class Agente {
+  - cnpj : String
+}
+
+class Empresa
+class Banco
+
+class Automovel {
+  - id : Long
+  - matricula : String
+  - ano : Integer
+  - marca : String
+  - modelo : String
+  - placa : String
+}
+
+class PedidoAluguel {
+  - id : Long
+  - dataInicio : LocalDate
+  - dataFim : LocalDate
+  - status : StatusPedido
+  - tipoProprietario : TipoProprietario
+  - parecer : String
+  - criadoEm : LocalDateTime
+  - avaliadoEm : LocalDateTime
+  + {static} validarPeriodo(inicio : LocalDate, fim : LocalDate) : void
+  + modificar(automovel, dataInicio, dataFim, tipoProprietario, bancoCredito) : void
+  + cancelar() : void
+  + visivelPara(agente : Agente) : boolean
+  + podeSerAvaliadoPor(agente : Agente) : boolean
+  + avaliar(agente : Agente, positivo : boolean, justificativa : String) : void
+  + podeTerContratoExecutadoPor(agente : Agente) : boolean
+  + solicitaCredito() : boolean
+  + getQuantidadeDiarias() : long
+}
+
+class Contrato {
+  - id : Long
+  - tipoProprietario : TipoProprietario
+  - dataExecucao : LocalDateTime
+  + {static} executar(pedido : PedidoAluguel, agente : Agente) : Contrato
+}
+
+class ContratoCredito {
+  - id : Long
+  - dataConcessao : LocalDateTime
+}
+
+enum StatusPedido {
+  EM_ANALISE
+  APROVADO
+  REPROVADO
+  CONTRATADO
+  CANCELADO
+  --
+  + permiteModificacao() : boolean
+  + permiteCancelamento() : boolean
+  + reservaVeiculo() : boolean
+  + {static} queReservamVeiculo() : List<StatusPedido>
+}
+
+enum TipoProprietario {
+  CLIENTE
+  EMPRESA
+  BANCO
+}
+
+enum Perfil {
+  CLIENTE
+  EMPRESA
+  BANCO
+  --
+  + getPapeis() : List<String>
+  + isAgente() : boolean
+}
+
+Usuario <|-- Cliente
+Usuario <|-- Agente
+Agente <|-- Empresa
+Agente <|-- Banco
+Usuario ..> Perfil
+
+Cliente *-- "1" Endereco : endereco
+Cliente "1" *-- "0..3" Rendimento : rendimentos
+
+PedidoAluguel "*" --> "1" Cliente : cliente
+PedidoAluguel "*" --> "1" Automovel : automovel
+PedidoAluguel "*" --> "0..1" Banco : bancoCredito
+PedidoAluguel "*" --> "0..1" Agente : agenteAvaliador
+PedidoAluguel ..> StatusPedido
+PedidoAluguel ..> TipoProprietario
+
+Contrato "0..1" -- "1" PedidoAluguel : pedido
+Contrato "*" --> "1" Agente : agenteResponsavel
+Contrato "1" *-- "0..1" ContratoCredito : contratoCredito
+ContratoCredito "*" --> "1" Banco : banco
+
+note bottom of PedidoAluguel
+  EM_ANALISE → (parecer) → APROVADO | REPROVADO
+  APROVADO → (execução do contrato) → CONTRATADO
+  EM_ANALISE | APROVADO → (cliente) → CANCELADO
+end note
+@enduml

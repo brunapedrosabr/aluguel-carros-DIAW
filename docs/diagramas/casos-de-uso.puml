@@ -1,0 +1,59 @@
+@startuml casos-de-uso
+title Rodar — Diagrama de Casos de Uso
+left to right direction
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam actorBorderColor #17191D
+skinparam usecaseBorderColor #17191D
+skinparam usecaseBackgroundColor #FFFFFF
+skinparam rectangleBorderColor #17191D
+skinparam ArrowColor #17191D
+
+actor "Cliente" as Cliente
+actor "Agente" as Agente
+actor "Empresa" as Empresa
+actor "Banco" as Banco
+
+Agente <|-- Empresa
+Agente <|-- Banco
+
+rectangle "Sistema de Aluguel de Carros" {
+  usecase "UC01 Cadastrar-se" as UC01
+  usecase "UC02 Fazer login" as UC02
+  usecase "UC03 Consultar e atualizar\nmeu cadastro" as UC03
+  usecase "UC04 Excluir meu cadastro" as UC04
+  usecase "UC05 Introduzir pedido\nde aluguel" as UC05
+  usecase "UC06 Solicitar contrato\nde crédito" as UC06
+  usecase "UC07 Consultar pedidos\ne status" as UC07
+  usecase "UC08 Modificar pedido" as UC08
+  usecase "UC09 Cancelar pedido" as UC09
+  usecase "UC10 Consultar fila\nde análise" as UC10
+  usecase "UC11 Avaliar pedido\n(emitir parecer)" as UC11
+  usecase "UC12 Executar contrato" as UC12
+  usecase "UC13 Conceder contrato\nde crédito" as UC13
+}
+
+Cliente -- UC01
+Cliente -- UC02
+Cliente -- UC03
+Cliente -- UC04
+Cliente -- UC05
+Cliente -- UC07
+Cliente -- UC08
+Cliente -- UC09
+
+UC05 <.. UC06 : <<extend>>
+UC12 <.. UC13 : <<extend>>
+
+UC02 -- Agente
+UC08 -- Agente
+UC10 -- Agente
+UC11 -- Agente
+UC12 -- Agente
+UC13 -- Banco
+
+note right of UC11
+  Pedido com contrato de crédito só
+  pode ser avaliado pelo banco escolhido.
+end note
+@enduml
