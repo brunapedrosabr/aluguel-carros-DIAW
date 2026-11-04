@@ -30,6 +30,7 @@ Protótipo funcional concluído: autenticação, CRUD de cliente, criação e ac
 ---
 
 ## 📚 Índice
+
 - [Links Úteis](#-links-úteis)
 - [Sobre o Projeto](#-sobre-o-projeto)
 - [Funcionalidades Principais](#-funcionalidades-principais)
@@ -58,9 +59,10 @@ Protótipo funcional concluído: autenticação, CRUD de cliente, criação e ac
 ---
 
 ## 🔗 Links Úteis
-* 🌐 **Demo Online:** _ainda não publicada_
+
+- 🌐 **Demo Online:** _ainda não publicada_
   > 💻 Ver a seção [Deploy](#-deploy) para publicar o back-end e o front-end.
-* 📖 **Modelagem (UML):** [docs/README.md](docs/README.md)
+- 📖 **Modelagem (UML):** [docs/README.md](docs/README.md)
   > 📚 Casos de uso, histórias do usuário, diagrama de classes e diagrama de pacotes.
 
 ---
@@ -72,10 +74,12 @@ Protótipo funcional concluído: autenticação, CRUD de cliente, criação e ac
 **Qual problema resolve.** Centraliza o fluxo entre quem aluga e quem aprova: o cliente acompanha em que etapa está o pedido, e os agentes recebem uma fila com os dados financeiros necessários para emitir o parecer — sem trocas de e-mail ou planilhas.
 
 **Contexto.** Acadêmico. O sistema é dividido nos dois subsistemas descritos no enunciado:
+
 1. **Gestão de pedidos e contratos** — API REST em Spring Boot (arquitetura MVC em camadas).
 2. **Construção dinâmica das páginas web** — SPA em React + Vite que consome a API.
 
 **Atores.**
+
 - **Cliente (contratante):** guarda RG, CPF, nome, endereço, profissão e até 3 entidades empregadoras com seus rendimentos.
 - **Agente:** empresa ou banco aderente. Bancos podem conceder contratos de crédito.
 
@@ -102,25 +106,25 @@ Protótipo funcional concluído: autenticação, CRUD de cliente, criação e ac
 
 ### 💻 Front-end
 
-* **Framework/Biblioteca:** React 19 + React Router 7
-* **Linguagem:** JavaScript (ES2022+, JSX)
-* **Estilização:** CSS puro com variáveis (tokens da direção visual), fontes Barlow e Barlow Condensed via Fontsource
-* **Gerenciamento de Estado:** Context API (sessão do usuário) + estado local
-* **Build Tool:** Vite 8
+- **Framework/Biblioteca:** React 19 + React Router 7
+- **Linguagem:** JavaScript (ES2022+, JSX)
+- **Estilização:** CSS puro com variáveis (tokens da direção visual), fontes Barlow e Barlow Condensed via Fontsource
+- **Gerenciamento de Estado:** Context API (sessão do usuário) + estado local
+- **Build Tool:** Vite 8
 
 ### 🖥️ Back-end
 
-* **Linguagem/Runtime:** Java 25 (JDK 25)
-* **Framework:** Spring Boot 4.0.x (Spring MVC, Spring Data JPA, Bean Validation)
-* **Banco de Dados:** Supabase (PostgreSQL); H2 em memória no perfil `dev`
-* **ORM:** Hibernate / JPA
-* **Autenticação:** Spring Security + OAuth2 Resource Server (JWT assinado com HS256) + BCrypt
-* **Build e dependências:** Apache Maven
+- **Linguagem/Runtime:** Java 25 (JDK 25)
+- **Framework:** Spring Boot 4.0.x (Spring MVC, Spring Data JPA, Bean Validation)
+- **Banco de Dados:** Supabase (PostgreSQL); H2 em memória no perfil `dev`
+- **ORM:** Hibernate / JPA
+- **Autenticação:** Spring Security + OAuth2 Resource Server (JWT assinado com HS256) + BCrypt
+- **Build e dependências:** Apache Maven
 
 ### ⚙️ Infraestrutura & DevOps
 
-* **Banco gerenciado:** Supabase
-* **Cloud (sugestão de deploy):** Render/Railway para a API e Vercel/Netlify para o front-end
+- **Banco gerenciado:** Supabase
+- **Cloud (sugestão de deploy):** Render/Railway para a API e Vercel/Netlify para o front-end
 
 ---
 
@@ -134,21 +138,22 @@ Navegador ──► React + Vite (páginas)  ──HTTP/JSON + JWT──►  Spr
 
 O back-end segue **MVC em camadas**:
 
-| Camada | Pacote | Papel |
-| :--- | :--- | :--- |
-| **Controller** | `controller` | Recebe as requisições REST, valida os DTOs e devolve JSON. |
-| **Model** | `model` | Entidades JPA com as **regras de negócio** (ex.: `PedidoAluguel.avaliar`, `Contrato.executar`). |
-| **View** | front-end `pages`/`components` | Páginas React que montam a interface dinamicamente a partir da API. |
-| Service | `service` | Orquestra casos de uso e transações (`@Transactional`). |
-| Repository | `repository` | Acesso a dados com Spring Data JPA. |
-| DTO | `dto` | Contratos de entrada e saída da API (records Java). |
-| Security | `security` | Configuração do Spring Security e geração do token JWT. |
-| Exception | `exception` | Exceções de negócio e tratamento global de erros. |
-| Config | `config` | Carga inicial de dados (automóveis, agentes e cliente demo). |
+| Camada         | Pacote                         | Papel                                                                                           |
+| :------------- | :----------------------------- | :---------------------------------------------------------------------------------------------- |
+| **Controller** | `controller`                   | Recebe as requisições REST, valida os DTOs e devolve JSON.                                      |
+| **Model**      | `model`                        | Entidades JPA com as **regras de negócio** (ex.: `PedidoAluguel.avaliar`, `Contrato.executar`). |
+| **View**       | front-end `pages`/`components` | Páginas React que montam a interface dinamicamente a partir da API.                             |
+| Service        | `service`                      | Orquestra casos de uso e transações (`@Transactional`).                                         |
+| Repository     | `repository`                   | Acesso a dados com Spring Data JPA.                                                             |
+| DTO            | `dto`                          | Contratos de entrada e saída da API (records Java).                                             |
+| Security       | `security`                     | Configuração do Spring Security e geração do token JWT.                                         |
+| Exception      | `exception`                    | Exceções de negócio e tratamento global de erros.                                               |
+| Config         | `config`                       | Carga inicial de dados (automóveis, agentes e cliente demo).                                    |
 
-**Padrões adotados:** Repository, Service Layer, DTO, *Rich Domain Model* (regras nas entidades), Factory Method (`Contrato.executar`), enum com regras (`StatusPedido`).
+**Padrões adotados:** Repository, Service Layer, DTO, _Rich Domain Model_ (regras nas entidades), Factory Method (`Contrato.executar`), enum com regras (`StatusPedido`).
 
 **Decisões importantes**
+
 - **JWT sem sessão no servidor:** a SPA guarda o token e o envia em `Authorization: Bearer`. Os papéis (`CLIENTE`, `AGENTE`, `BANCO`, `EMPRESA`) vêm do próprio token.
 - **Schema próprio no Supabase:** as tabelas ficam no schema `aluguel`, fora do `public` que a API REST automática do Supabase expõe — assim CPF, RG e rendimentos não ficam acessíveis por ela.
 - **Herança `JOINED`:** `Usuario` → `Cliente` / `Agente` → `Empresa` / `Banco`, cada um com sua tabela.
@@ -158,24 +163,24 @@ O back-end segue **MVC em camadas**:
 
 Fontes PlantUML e imagens em [`docs/diagramas`](docs/diagramas). Detalhes em [docs/README.md](docs/README.md).
 
-| Diagrama de Casos de Uso | Diagrama de Pacotes (Visão Lógica) |
-| :---: | :---: |
-| <img src="docs/diagramas/casos-de-uso.svg" alt="Diagrama de Casos de Uso" width="380px"> | <img src="docs/diagramas/diagrama-de-pacotes.svg" alt="Diagrama de Pacotes" width="380px"> |
-| **Diagrama de Classes (model)** | **Histórias do Usuário** |
-| <img src="docs/diagramas/diagrama-de-classes.svg" alt="Diagrama de Classes" width="380px"> | [docs/historias-de-usuario.md](docs/historias-de-usuario.md) |
+|                                  Diagrama de Casos de Uso                                  |                             Diagrama de Pacotes (Visão Lógica)                             |
+| :----------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------: |
+|  <img src="docs/diagramas/casos-de-uso.svg" alt="Diagrama de Casos de Uso" width="380px">  | <img src="docs/diagramas/diagrama-de-pacotes.svg" alt="Diagrama de Pacotes" width="380px"> |
+|                              **Diagrama de Classes (model)**                               |                                  **Histórias do Usuário**                                  |
+| <img src="docs/diagramas/diagrama-de-classes.svg" alt="Diagrama de Classes" width="380px"> |                [docs/historias-de-usuario.md](docs/historias-de-usuario.md)                |
 
 ### Regras de negócio no modelo
 
-| Regra | Onde está |
-| :--- | :--- |
-| Cliente tem no máximo 3 rendimentos | `Cliente.adicionarRendimento` |
-| Devolução depois da retirada | `PedidoAluguel.validarPeriodo` |
-| Só pedido em análise pode ser modificado | `StatusPedido.permiteModificacao` |
-| Cancelamento até a execução do contrato | `StatusPedido.permiteCancelamento` |
-| Registro em nome do banco exige crédito | `PedidoAluguel.definirDados` |
-| Pedido com crédito só é avaliado pelo banco escolhido | `PedidoAluguel.visivelPara` / `avaliar` |
-| Contrato executado pelo agente que aprovou; gera contrato de crédito | `Contrato.executar` |
-| Automóvel não pode ter dois pedidos ativos no mesmo período | `PedidoAluguelRepository.contarConflitos` |
+| Regra                                                                | Onde está                                 |
+| :------------------------------------------------------------------- | :---------------------------------------- |
+| Cliente tem no máximo 3 rendimentos                                  | `Cliente.adicionarRendimento`             |
+| Devolução depois da retirada                                         | `PedidoAluguel.validarPeriodo`            |
+| Só pedido em análise pode ser modificado                             | `StatusPedido.permiteModificacao`         |
+| Cancelamento até a execução do contrato                              | `StatusPedido.permiteCancelamento`        |
+| Registro em nome do banco exige crédito                              | `PedidoAluguel.definirDados`              |
+| Pedido com crédito só é avaliado pelo banco escolhido                | `PedidoAluguel.visivelPara` / `avaliar`   |
+| Contrato executado pelo agente que aprovou; gera contrato de crédito | `Contrato.executar`                       |
+| Automóvel não pode ter dois pedidos ativos no mesmo período          | `PedidoAluguelRepository.contarConflitos` |
 
 ---
 
@@ -183,10 +188,10 @@ Fontes PlantUML e imagens em [`docs/diagramas`](docs/diagramas). Detalhes em [do
 
 ### Pré-requisitos
 
-* **Java JDK 25** (back-end)
-* **Apache Maven 3.9+** (ou o Maven embutido da sua IDE)
-* **Node.js 22 LTS** (ou 20.19+) e **npm** (front-end)
-* Uma conta gratuita no **[Supabase](https://supabase.com)** (opcional para rodar com o perfil `dev`)
+- **Java JDK 25** (back-end)
+- **Apache Maven 3.9+** (ou o Maven embutido da sua IDE)
+- **Node.js 22 LTS** (ou 20.19+) e **npm** (front-end)
+- Uma conta gratuita no **[Supabase](https://supabase.com)** (opcional para rodar com o perfil `dev`)
 
 ---
 
@@ -196,23 +201,23 @@ Fontes PlantUML e imagens em [`docs/diagramas`](docs/diagramas). Detalhes em [do
 
 Copie `backend/.env.example` para `backend/.env` e preencha. O arquivo é lido automaticamente pelo Spring (`spring.config.import`) e **não deve ser versionado**.
 
-| Variável | Descrição | Exemplo |
-| :--- | :--- | :--- |
-| `SUPABASE_DB_URL` | URL JDBC do *Session pooler* do Supabase. | `jdbc:postgresql://aws-0-sa-east-1.pooler.supabase.com:5432/postgres?sslmode=require` |
-| `SUPABASE_DB_USER` | Usuário do banco (no pooler: `postgres.<project-ref>`). | `postgres.abcdefghijklmnop` |
-| `SUPABASE_DB_PASSWORD` | Senha definida ao criar o projeto. | `sua-senha` |
-| `JWT_SECRET` | Chave de assinatura dos tokens (mín. 32 caracteres). | `uma-frase-longa-e-aleatoria-...` |
-| `DB_SCHEMA` | Schema das tabelas (opcional). | `aluguel` |
-| `CORS_ORIGENS` | Origens liberadas no CORS (opcional). | `http://localhost:5173` |
-| `SERVER_PORT` | Porta da API (opcional). | `8080` |
-| `SEED_DEMO` | Cria a cliente de demonstração (opcional). | `true` |
+| Variável               | Descrição                                               | Exemplo                                                                               |
+| :--------------------- | :------------------------------------------------------ | :------------------------------------------------------------------------------------ |
+| `SUPABASE_DB_URL`      | URL JDBC do _Session pooler_ do Supabase.               | `jdbc:postgresql://aws-0-sa-east-1.pooler.supabase.com:5432/postgres?sslmode=require` |
+| `SUPABASE_DB_USER`     | Usuário do banco (no pooler: `postgres.<project-ref>`). | `postgres.abcdefghijklmnop`                                                           |
+| `SUPABASE_DB_PASSWORD` | Senha definida ao criar o projeto.                      | `sua-senha`                                                                           |
+| `JWT_SECRET`           | Chave de assinatura dos tokens (mín. 32 caracteres).    | `uma-frase-longa-e-aleatoria-...`                                                     |
+| `DB_SCHEMA`            | Schema das tabelas (opcional).                          | `aluguel`                                                                             |
+| `CORS_ORIGENS`         | Origens liberadas no CORS (opcional).                   | `http://localhost:5173`                                                               |
+| `SERVER_PORT`          | Porta da API (opcional).                                | `8080`                                                                                |
+| `SEED_DEMO`            | Cria a cliente de demonstração (opcional).              | `true`                                                                                |
 
 #### 2 Front-end (React, Vite)
 
 Em desenvolvimento **nenhuma variável é necessária**: o Vite repassa as chamadas `/api` para `http://localhost:8080`.
 
-| Variável | Descrição | Exemplo |
-| :--- | :--- | :--- |
+| Variável       | Descrição                                 | Exemplo                          |
+| :------------- | :---------------------------------------- | :------------------------------- |
 | `VITE_API_URL` | URL do back-end em produção (sem `/api`). | `https://rodar-api.onrender.com` |
 
 ---
@@ -280,7 +285,7 @@ cd backend
 mvn spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 
-🚀 *A API fica em **http://localhost:8080**.*
+🚀 _A API fica em **http://localhost:8080**._
 
 #### Terminal 2: Front-end (React, Vite)
 
@@ -289,7 +294,7 @@ cd frontend
 npm run dev
 ```
 
-🎨 *O front-end fica em **http://localhost:5173**.*
+🎨 _O front-end fica em **http://localhost:5173**._
 
 #### 🐳 Docker Compose
 
@@ -301,12 +306,12 @@ Não se aplica: o banco é o Supabase (na nuvem) e o perfil `dev` dispensa banco
 
 Criadas automaticamente na primeira execução:
 
-| Perfil | Usuário | Senha | Observação |
-| :--- | :--- | :--- | :--- |
-| Cliente | `ana.ribeiro` | `cliente123` | Já tem 3 rendimentos e um pedido em análise com crédito no Banco Horizonte. |
-| Agente · banco | `banco.horizonte` | `agente123` | Vê o pedido da Ana (crédito escolhido com este banco). |
-| Agente · banco | `banco.serra` | `agente123` | Vê apenas pedidos sem crédito ou com crédito neste banco. |
-| Agente · empresa | `via.norte` | `agente123` | Vê apenas pedidos sem contrato de crédito. |
+| Perfil           | Usuário           | Senha        | Observação                                                                  |
+| :--------------- | :---------------- | :----------- | :-------------------------------------------------------------------------- |
+| Cliente          | `ana.ribeiro`     | `cliente123` | Já tem 3 rendimentos e um pedido em análise com crédito no Banco Horizonte. |
+| Agente · banco   | `banco.horizonte` | `agente123`  | Vê o pedido da Ana (crédito escolhido com este banco).                      |
+| Agente · banco   | `banco.serra`     | `agente123`  | Vê apenas pedidos sem crédito ou com crédito neste banco.                   |
+| Agente · empresa | `via.norte`       | `agente123`  | Vê apenas pedidos sem contrato de crédito.                                  |
 
 > [!WARNING]
 > Troque essas senhas (ou desative com `SEED_DEMO=false`) antes de publicar o sistema.
@@ -328,7 +333,7 @@ cd ../backend && mvn clean package   # gera backend/target/aluguel-carros-0.0.1-
 java -jar backend/target/aluguel-carros-0.0.1-SNAPSHOT.jar
 ```
 
-3. **Front-end:** publique a pasta `frontend/dist` (ex.: Vercel ou Netlify) com `VITE_API_URL` apontando para a API. Configure o *fallback* de rotas da SPA para `index.html`.
+3. **Front-end:** publique a pasta `frontend/dist` (ex.: Vercel ou Netlify) com `VITE_API_URL` apontando para a API. Configure o _fallback_ de rotas da SPA para `index.html`.
 
 ---
 
@@ -384,13 +389,13 @@ java -jar backend/target/aluguel-carros-0.0.1-SNAPSHOT.jar
 
 ### 🌐 Aplicação Web
 
-| Tela | Captura de Tela |
-| :---: | :---: |
-| **Login** | **Meus pedidos (cliente)** |
-| <img src="docs/imagens/login.png" alt="Tela de login" width="400px"> | <img src="docs/imagens/meus-pedidos.png" alt="Meus pedidos" width="400px"> |
-| **Novo pedido** | **Meu cadastro (CRUD de cliente)** |
-| <img src="docs/imagens/novo-pedido.png" alt="Novo pedido" width="400px"> | <img src="docs/imagens/meu-cadastro.png" alt="Meu cadastro" width="400px"> |
-| **Fila de análise (agente)** | **Celular** |
+|                                          Tela                                          |                                 Captura de Tela                                  |
+| :------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------: |
+|                                       **Login**                                        |                            **Meus pedidos (cliente)**                            |
+|          <img src="docs/imagens/login.png" alt="Tela de login" width="400px">          |    <img src="docs/imagens/meus-pedidos.png" alt="Meus pedidos" width="400px">    |
+|                                    **Novo pedido**                                     |                        **Meu cadastro (CRUD de cliente)**                        |
+|        <img src="docs/imagens/novo-pedido.png" alt="Novo pedido" width="400px">        |    <img src="docs/imagens/meu-cadastro.png" alt="Meu cadastro" width="400px">    |
+|                              **Fila de análise (agente)**                              |                                   **Celular**                                    |
 | <img src="docs/imagens/agente-fila.png" alt="Fila de análise do agente" width="400px"> | <img src="docs/imagens/celular.png" alt="Meus pedidos no celular" width="200px"> |
 
 ### 💻 Exemplo de Saída no Terminal (API)
@@ -406,7 +411,12 @@ curl -X POST http://localhost:8080/api/auth/login \
 ```json
 {
   "token": "eyJhbGciOiJIUzI1NiJ9...",
-  "usuario": { "id": 4, "nome": "Ana Ribeiro", "login": "ana.ribeiro", "perfil": "CLIENTE" }
+  "usuario": {
+    "id": 4,
+    "nome": "Ana Ribeiro",
+    "login": "ana.ribeiro",
+    "perfil": "CLIENTE"
+  }
 }
 ```
 
@@ -436,25 +446,25 @@ curl -X POST http://localhost:8080/api/pedidos \
 
 Todas as rotas, exceto as de `/api/auth`, exigem o cabeçalho `Authorization: Bearer <token>`.
 
-| Método | Rota | Perfil | Descrição |
-| :--- | :--- | :--- | :--- |
-| `POST` | `/api/auth/login` | público | Login; devolve o token JWT |
-| `POST` | `/api/auth/registrar` | público | Cadastra cliente e devolve o token |
-| `GET` | `/api/clientes/me` | cliente | Consulta o próprio cadastro |
-| `PUT` | `/api/clientes/me` | cliente | Atualiza o próprio cadastro |
-| `DELETE` | `/api/clientes/me` | cliente | Exclui o próprio cadastro |
-| `GET` | `/api/pedidos` | cliente | Lista os pedidos do cliente |
-| `GET` | `/api/pedidos/{id}` | cliente | Consulta um pedido |
-| `POST` | `/api/pedidos` | cliente | Introduz um pedido |
-| `PUT` | `/api/pedidos/{id}` | cliente | Modifica um pedido em análise |
-| `PATCH` | `/api/pedidos/{id}/cancelar` | cliente | Cancela um pedido |
-| `GET` | `/api/agente/pedidos?status=` | agente | Fila de pedidos visíveis ao agente |
-| `GET` | `/api/agente/pedidos/{id}` | agente | Pedido com dados do contratante |
-| `PUT` | `/api/agente/pedidos/{id}` | agente | Modifica um pedido em análise |
-| `POST` | `/api/agente/pedidos/{id}/parecer` | agente | Emite parecer `{ "positivo": true, "justificativa": "..." }` |
-| `POST` | `/api/agente/pedidos/{id}/contrato` | agente | Executa o contrato |
-| `GET` | `/api/automoveis` | autenticado | Lista os automóveis |
-| `GET` | `/api/bancos` | autenticado | Lista os bancos agentes |
+| Método   | Rota                                | Perfil      | Descrição                                                    |
+| :------- | :---------------------------------- | :---------- | :----------------------------------------------------------- |
+| `POST`   | `/api/auth/login`                   | público     | Login; devolve o token JWT                                   |
+| `POST`   | `/api/auth/registrar`               | público     | Cadastra cliente e devolve o token                           |
+| `GET`    | `/api/clientes/me`                  | cliente     | Consulta o próprio cadastro                                  |
+| `PUT`    | `/api/clientes/me`                  | cliente     | Atualiza o próprio cadastro                                  |
+| `DELETE` | `/api/clientes/me`                  | cliente     | Exclui o próprio cadastro                                    |
+| `GET`    | `/api/pedidos`                      | cliente     | Lista os pedidos do cliente                                  |
+| `GET`    | `/api/pedidos/{id}`                 | cliente     | Consulta um pedido                                           |
+| `POST`   | `/api/pedidos`                      | cliente     | Introduz um pedido                                           |
+| `PUT`    | `/api/pedidos/{id}`                 | cliente     | Modifica um pedido em análise                                |
+| `PATCH`  | `/api/pedidos/{id}/cancelar`        | cliente     | Cancela um pedido                                            |
+| `GET`    | `/api/agente/pedidos?status=`       | agente      | Fila de pedidos visíveis ao agente                           |
+| `GET`    | `/api/agente/pedidos/{id}`          | agente      | Pedido com dados do contratante                              |
+| `PUT`    | `/api/agente/pedidos/{id}`          | agente      | Modifica um pedido em análise                                |
+| `POST`   | `/api/agente/pedidos/{id}/parecer`  | agente      | Emite parecer `{ "positivo": true, "justificativa": "..." }` |
+| `POST`   | `/api/agente/pedidos/{id}/contrato` | agente      | Executa o contrato                                           |
+| `GET`    | `/api/automoveis`                   | autenticado | Lista os automóveis                                          |
+| `GET`    | `/api/bancos`                       | autenticado | Lista os bancos agentes                                      |
 
 ---
 
@@ -468,7 +478,8 @@ Cobrem as regras de negócio do pacote `model` (limite de rendimentos, ciclo de 
 cd backend
 mvn test
 ```
-*Ferramenta: JUnit 5 (via `spring-boot-starter-test`).*
+
+_Ferramenta: JUnit 5 (via `spring-boot-starter-test`)._
 
 ### Build do front-end
 
@@ -481,25 +492,22 @@ npm run build
 
 ## 🔗 Documentações utilizadas
 
-* 📖 [Documentação do **Spring Boot**](https://docs.spring.io/spring-boot/index.html)
-* 📖 [Guia de migração do **Spring Boot 4.0**](https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-4.0-Migration-Guide)
-* 📖 [**Spring Security** — OAuth2 Resource Server / JWT](https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/jwt.html)
-* 📖 [**Supabase** — conexão com o banco](https://supabase.com/docs/guides/database/connecting-to-postgres)
-* 📖 [Documentação do **React**](https://react.dev/reference/react)
-* 📖 [Configuração do **Vite**](https://vite.dev/config/)
-* 📖 [**PlantUML**](https://plantuml.com/)
-* 📖 [Repositório da disciplina — DIAW](https://github.com/joaopauloaramuni/desenvolvimento-e-integracao-de-aplicacoes-web)
+- 📖 [Documentação do **Spring Boot**](https://docs.spring.io/spring-boot/index.html)
+- 📖 [Guia de migração do **Spring Boot 4.0**](https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-4.0-Migration-Guide)
+- 📖 [**Spring Security** — OAuth2 Resource Server / JWT](https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/jwt.html)
+- 📖 [**Supabase** — conexão com o banco](https://supabase.com/docs/guides/database/connecting-to-postgres)
+- 📖 [Documentação do **React**](https://react.dev/reference/react)
+- 📖 [Configuração do **Vite**](https://vite.dev/config/)
+- 📖 [**PlantUML**](https://plantuml.com/)
+- 📖 [Repositório da disciplina — DIAW](https://github.com/joaopauloaramuni/desenvolvimento-e-integracao-de-aplicacoes-web)
 
 ---
 
 ## 👥 Autores
 
-| 👤 Nome | 🖼️ Foto | :octocat: GitHub | 💼 LinkedIn | 📤 Gmail |
-|---------|----------|-----------------|-------------|-----------|
-| Bruna | <div align="center"><img src="https://joaopauloaramuni.github.io/image/aramunilogo.png" width="70px" height="70px"></div> | <div align="center"><a href="https://github.com/SEU_USUARIO"><img src="https://joaopauloaramuni.github.io/image/github6.png" width="50px" height="50px"></a></div> | <div align="center"><a href="https://www.linkedin.com/in/SEU_PERFIL"><img src="https://joaopauloaramuni.github.io/image/linkedin2.png" width="50px" height="50px"></a></div> | <div align="center"><a href="mailto:SEU_EMAIL"><img src="https://joaopauloaramuni.github.io/image/gmail3.png" width="50px" height="50px"></a></div> |
-
-> [!TIP]
-> Substitua a foto e os links pelos seus e adicione uma linha para cada integrante do grupo.
+| 👤 Nome             | 🖼️ Foto                                                                                                | :octocat: GitHub                                                                                                                                                      | 💼 LinkedIn                                                                                                                                                                       | 📤 Gmail                                                                                                                                                      |
+| ------------------- | ------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Bruna Pedrosa Nunes | <div align="center"><img src="https://github.com/brunapedrosabr.png" width="70px" height="70px"></div> | <div align="center"><a href="https://github.com/brunapedrosabr"><img src="https://joaopauloaramuni.github.io/image/github6.png" width="50px" height="50px"></a></div> | <div align="center"><a href="https://www.linkedin.com/in/brunapedrosabr/"><img src="https://joaopauloaramuni.github.io/image/linkedin2.png" width="50px" height="50px"></a></div> | <div align="center"><a href="mailto:buupnunes@gmail.com"><img src="https://joaopauloaramuni.github.io/image/gmail3.png" width="50px" height="50px"></a></div> |
 
 ---
 
@@ -518,8 +526,8 @@ npm run build
 
 ## 🙏 Agradecimentos
 
-* [**Engenharia de Software PUC Minas**](https://www.instagram.com/engsoftwarepucminas/) — pelo apoio institucional e pela estrutura acadêmica.
-* [**Prof. Dr. João Paulo Aramuni**](https://github.com/joaopauloaramuni) — pelos ensinamentos em Desenvolvimento e Integração de Aplicações Web e pelo template deste README.
+- [**Engenharia de Software PUC Minas**](https://www.instagram.com/engsoftwarepucminas/) — pelo apoio institucional e pela estrutura acadêmica.
+- [**Prof. Dr. João Paulo Aramuni**](https://github.com/joaopauloaramuni) — pelos ensinamentos em Desenvolvimento e Integração de Aplicações Web e pelo template deste README.
 
 ---
 
